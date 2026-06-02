@@ -111,6 +111,7 @@ activarBusqueda();
 mostrarRanking();
 mostrarOportunidades();
 mostrarClientesInactivos();
+mostrarPotencialesDistribuidores();
 }catch(ex){
 
 console.error(ex);
