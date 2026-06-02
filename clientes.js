@@ -501,3 +501,123 @@ return "🟡 Frecuente";
 return "🟢 Nuevo";
 
 }
+
+
+function mostrarOportunidades(){
+
+const contenedor =
+document.getElementById(
+"oportunidades"
+);
+
+if(!contenedor)return;
+
+let html = "";
+
+/* CLIENTES VIP */
+
+const vip =
+
+clientesGlobal.filter(
+c=>
+
+Number(
+c.cantidad_pedidos || 0
+) >= 5
+
+);
+
+html += `
+
+<div class="card">
+
+<h3>
+
+🔵 Clientes VIP
+
+</h3>
+
+<p>
+
+${vip.length}
+
+</p>
+
+</div>
+
+`;
+
+/* CLIENTES FRECUENTES */
+
+const frecuentes =
+
+clientesGlobal.filter(
+c=>{
+
+const pedidos =
+
+Number(
+c.cantidad_pedidos || 0
+);
+
+return pedidos >=2 && pedidos <5;
+
+});
+
+html += `
+
+<div class="card">
+
+<h3>
+
+🟡 Clientes Frecuentes
+
+</h3>
+
+<p>
+
+${frecuentes.length}
+
+</p>
+
+</div>
+
+`;
+
+/* CLIENTES NUEVOS */
+
+const nuevos =
+
+clientesGlobal.filter(
+c=>
+
+Number(
+c.cantidad_pedidos || 0
+) === 1
+
+);
+
+html += `
+
+<div class="card">
+
+<h3>
+
+🟢 Clientes Nuevos
+
+</h3>
+
+<p>
+
+${nuevos.length}
+
+</p>
+
+</div>
+
+`;
+
+contenedor.innerHTML =
+html;
+
+}
