@@ -190,7 +190,6 @@ p.cantidad;
 return total;
 
 }
-
 async function enviarPedido(){
 
 const nombre =
@@ -344,6 +343,90 @@ error
 
 alert(
 "Pedido guardado localmente pero hubo un problema al guardar en la nube."
+);
+
+}
+
+/* ==========================
+   ACTUALIZAR CRM CLIENTES
+========================== */
+
+const { data: clienteExistente } =
+
+await supabaseClient
+.from("clientes")
+.select("*")
+.eq(
+"telefono",
+telefono
+)
+.limit(1);
+
+if(
+!clienteExistente ||
+clienteExistente.length===0
+){
+
+await supabaseClient
+.from("clientes")
+.insert([{
+
+nombre,
+telefono,
+correo,
+
+ciudad,
+direccion,
+
+cantidad_pedidos:1,
+
+total_compras:
+calcularTotal(),
+
+ultima_compra:
+new Date()
+.toISOString()
+
+}]);
+
+}
+else{
+
+const cliente =
+clienteExistente[0];
+
+await supabaseClient
+.from("clientes")
+.update({
+
+cantidad_pedidos:
+
+(cliente.cantidad_pedidos || 0)
+
++ 1,
+
+total_compras:
+
+Number(
+cliente.total_compras || 0
+)
+
++
+
+calcularTotal(),
+
+ultima_compra:
+new Date()
+.toISOString(),
+
+correo,
+ciudad,
+direccion
+
+})
+.eq(
+"id",
+cliente.id
 );
 
 }
