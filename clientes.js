@@ -109,6 +109,7 @@ clientesGlobal
 
 activarBusqueda();
 mostrarRanking();
+mostrarOportunidades();
 }catch(ex){
 
 console.error(ex);
