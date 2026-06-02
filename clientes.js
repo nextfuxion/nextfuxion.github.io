@@ -202,6 +202,12 @@ ${cliente.cantidad_pedidos || 0}
 
 <p>
 
+🏷️ ${obtenerCategoria(cliente)}
+
+</p>
+
+<p>
+
 💰 Total:
 
 $${Number(
