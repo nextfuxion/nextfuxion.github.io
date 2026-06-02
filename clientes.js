@@ -108,7 +108,7 @@ clientesGlobal
 );
 
 activarBusqueda();
-
+mostrarRanking();
 }catch(ex){
 
 console.error(ex);
