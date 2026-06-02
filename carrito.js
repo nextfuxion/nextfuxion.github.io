@@ -191,7 +191,7 @@ return total;
 
 }
 
-function enviarPedido(){
+async function enviarPedido(){
 
 const nombre =
 document.getElementById(
@@ -291,6 +291,70 @@ pedidos
 )
 
 );
+
+try{
+
+const { error } =
+
+await supabaseClient
+.from("pedidos")
+.insert([{
+
+numero:
+numeroPedido,
+
+fecha:
+pedido.fecha,
+
+estado:
+"Pendiente",
+
+total:
+pedido.total,
+
+cliente_nombre:
+nombre,
+
+cliente_telefono:
+telefono,
+
+cliente_correo:
+correo,
+
+ciudad:
+ciudad,
+
+direccion:
+direccion,
+
+observaciones:
+observaciones,
+
+productos:
+carrito
+
+}]);
+
+if(error){
+
+console.error(
+"Supabase:",
+error
+);
+
+alert(
+"Pedido guardado localmente pero hubo un problema al guardar en la nube."
+);
+
+}
+
+}catch(ex){
+
+console.error(
+ex
+);
+
+}
 
 let mensaje =
 
