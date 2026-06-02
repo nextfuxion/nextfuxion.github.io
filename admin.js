@@ -1,12 +1,32 @@
-const pedidos =
-JSON.parse(
-localStorage.getItem("pedidos")
-) || [];
+async function cargarAdmin(){
 
 const contenedor =
 document.getElementById(
 "ultimosPedidos"
 );
+
+contenedor.innerHTML =
+"<p>Cargando...</p>";
+
+try{
+
+const { data: pedidos, error } =
+
+await supabaseClient
+.from("pedidos")
+.select("*")
+.order(
+"created_at",
+{
+ascending:false
+}
+);
+
+if(error){
+
+throw error;
+
+}
 
 let totalVentas = 0;
 
@@ -24,7 +44,9 @@ pedidos.forEach(
 pedido=>{
 
 totalVentas +=
-pedido.total || 0;
+Number(
+pedido.total || 0
+);
 
 if(
 pedido.fecha &&
@@ -32,22 +54,27 @@ pedido.fecha.includes(hoy)
 ){
 
 ventasHoy +=
-pedido.total || 0;
+Number(
+pedido.total || 0
+);
 
 }
 
 if(
-pedido.cliente &&
-pedido.cliente.nombre
+pedido.cliente_nombre
 ){
 
 clientes[
-pedido.cliente.nombre
+pedido.cliente_nombre
 ] =
 
-(clientes[
-pedido.cliente.nombre
-] || 0) + 1;
+(
+clientes[
+pedido.cliente_nombre
+] || 0
+)
+
++ 1;
 
 }
 
@@ -62,13 +89,17 @@ productos[
 p.nombre
 ] =
 
-(productos[
+(
+productos[
 p.nombre
-] || 0)
+] || 0
+)
 
 +
 
-p.cantidad;
+Number(
+p.cantidad
+);
 
 });
 
@@ -102,15 +133,13 @@ ventasHoy.toLocaleString(
 "es-CO"
 );
 
-const clientesUnicos =
-Object.keys(
-clientes
-).length;
-
 document.getElementById(
 "totalClientes"
 ).innerText =
-clientesUnicos;
+
+Object.keys(
+clientes
+).length;
 
 const ticketPromedio =
 
@@ -189,13 +218,11 @@ document.getElementById(
 ).innerText =
 clienteTop;
 
-const ultimos =
+contenedor.innerHTML = "";
 
-[...pedidos]
-.reverse()
-.slice(0,10);
-
-ultimos.forEach(
+pedidos
+.slice(0,10)
+.forEach(
 pedido=>{
 
 contenedor.innerHTML += `
@@ -210,7 +237,7 @@ ${pedido.numero}
 
 <p>
 
-👤 ${pedido.cliente.nombre}
+👤 ${pedido.cliente_nombre}
 
 </p>
 
@@ -222,7 +249,7 @@ ${pedido.numero}
 
 <p>
 
-💰 $${pedido.total.toLocaleString("es-CO")}
+💰 $${Number(pedido.total).toLocaleString("es-CO")}
 
 </p>
 
@@ -237,10 +264,10 @@ ${pedido.estado}
 
 `;
 
-}
-);
+});
 
-function exportarCSV(){
+window.exportarCSV =
+function(){
 
 let csv =
 
@@ -259,18 +286,17 @@ csv +=
 
 +
 
-`${p.cliente.nombre};`
+`${p.cliente_nombre};`
 
 +
 
-`${p.cliente.telefono};`
+`${p.cliente_telefono};`
 
 +
 
 `${p.total}\n`;
 
-}
-);
+});
 
 const blob =
 new Blob(
@@ -296,4 +322,36 @@ enlace.download =
 
 enlace.click();
 
+};
+
+}catch(ex){
+
+console.error(ex);
+
+contenedor.innerHTML =
+
+`
+
+<div class="card">
+
+<h3>
+
+Error cargando pedidos
+
+</h3>
+
+<p>
+
+${ex.message}
+
+</p>
+
+</div>
+
+`;
+
 }
+
+}
+
+cargarAdmin();
