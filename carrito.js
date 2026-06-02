@@ -469,3 +469,44 @@ cargarDatosCliente();
 },100);
 
 cargarCarrito();
+async function probarSupabase(){
+
+try{
+
+const { data, error } =
+
+await supabaseClient
+.from("pedidos")
+.select("*")
+.limit(1);
+
+console.log("DATA:", data);
+
+console.log("ERROR:", error);
+
+if(error){
+
+alert(
+"Error Supabase: " +
+error.message
+);
+
+}else{
+
+alert(
+"Conexión exitosa con Supabase"
+);
+
+}
+
+}catch(ex){
+
+console.error(ex);
+
+alert(
+ex.message
+);
+
+}
+
+}
