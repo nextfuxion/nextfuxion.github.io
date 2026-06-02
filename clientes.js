@@ -742,3 +742,119 @@ contenedor.innerHTML =
 html;
 
 }
+
+function mostrarPotencialesDistribuidores(){
+
+const contenedor =
+document.getElementById(
+"potencialesDistribuidores"
+);
+
+if(!contenedor)return;
+
+let html = "";
+
+const candidatos =
+
+clientesGlobal.filter(
+cliente=>{
+
+const pedidos =
+
+Number(
+cliente.cantidad_pedidos || 0
+);
+
+const total =
+
+Number(
+cliente.total_compras || 0
+);
+
+return (
+
+pedidos >= 3
+
+||
+
+total >= 300000
+
+);
+
+});
+
+if(
+candidatos.length===0
+){
+
+contenedor.innerHTML =
+
+`
+
+<div class="card">
+
+<h3>
+
+No hay candidatos todavía
+
+</h3>
+
+</div>
+
+`;
+
+return;
+
+}
+
+candidatos.forEach(
+cliente=>{
+
+html += `
+
+<div class="card">
+
+<h3>
+
+💎 ${cliente.nombre}
+
+</h3>
+
+<p>
+
+📱 ${cliente.telefono}
+
+</p>
+
+<p>
+
+📦 ${cliente.cantidad_pedidos} pedidos
+
+</p>
+
+<p>
+
+💰 $${Number(
+cliente.total_compras || 0
+).toLocaleString("es-CO")}
+
+</p>
+
+<a
+target="_blank"
+href="https://wa.me/57${cliente.telefono}?text=Hola%20${encodeURIComponent(cliente.nombre)},%20he%20notado%20tu%20interés%20en%20los%20productos%20FuXion.%20Quisiera%20contarte%20sobre%20los%20beneficios%20de%20ser%20Cliente%20Preferente%20o%20Distribuidor.">
+
+Invitar
+
+</a>
+
+</div>
+
+`;
+
+});
+
+contenedor.innerHTML =
+html;
+
+}
