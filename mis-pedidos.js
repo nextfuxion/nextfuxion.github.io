@@ -1,18 +1,36 @@
-const pedidos =
-
-JSON.parse(
-localStorage.getItem(
-"pedidos"
-)
-) || [];
+async function cargarPedidos(){
 
 const contenedor =
 document.getElementById(
 "listaPedidos"
 );
 
+contenedor.innerHTML =
+"<p>Cargando pedidos...</p>";
+
+try{
+
+const { data, error } =
+
+await supabaseClient
+.from("pedidos")
+.select("*")
+.order(
+"created_at",
+{
+ascending:false
+}
+);
+
+if(error){
+
+throw error;
+
+}
+
 if(
-pedidos.length===0
+!data ||
+data.length===0
 ){
 
 contenedor.innerHTML =
@@ -37,14 +55,13 @@ Cuando realices tu primera compra aparecerá aquí.
 
 `;
 
-}else{
+return;
 
-const pedidosOrdenados =
+}
 
-[...pedidos]
-.reverse();
+contenedor.innerHTML = "";
 
-pedidosOrdenados.forEach(
+data.forEach(
 pedido=>{
 
 contenedor.innerHTML += `
@@ -65,19 +82,19 @@ ${pedido.numero}
 
 <p>
 
-👤 ${pedido.cliente.nombre}
+👤 ${pedido.cliente_nombre}
 
 </p>
 
 <p>
 
-📦 ${pedido.productos.length} productos
+📦 ${pedido.productos?.length || 0} productos
 
 </p>
 
 <p>
 
-💰 $${pedido.total.toLocaleString("es-CO")}
+💰 $${Number(pedido.total).toLocaleString("es-CO")}
 
 </p>
 
@@ -106,6 +123,34 @@ Ver detalle
 
 });
 
+}catch(ex){
+
+console.error(ex);
+
+contenedor.innerHTML =
+
+`
+
+<div class="card">
+
+<h3>
+
+Error cargando pedidos
+
+</h3>
+
+<p>
+
+${ex.message}
+
+</p>
+
+</div>
+
+`;
+
+}
+
 }
 
 function verDetalle(
@@ -130,19 +175,19 @@ ${pedido.numero}
 
 <p>
 
-👤 ${pedido.cliente.nombre}
+👤 ${pedido.cliente_nombre}
 
 </p>
 
 <p>
 
-📱 ${pedido.cliente.telefono}
+📱 ${pedido.cliente_telefono || ""}
 
 </p>
 
 <p>
 
-📍 ${pedido.cliente.ciudad}
+📍 ${pedido.ciudad || ""}
 
 </p>
 
@@ -155,6 +200,10 @@ Productos
 </h3>
 
 `;
+
+if(
+pedido.productos
+){
 
 pedido.productos.forEach(
 p=>{
@@ -171,6 +220,8 @@ ${p.cantidad} x ${p.nombre}
 
 });
 
+}
+
 html += `
 
 <hr>
@@ -179,7 +230,7 @@ html += `
 
 💰 Total:
 
-$${pedido.total.toLocaleString("es-CO")}
+$${Number(pedido.total).toLocaleString("es-CO")}
 
 </h3>
 
@@ -231,3 +282,5 @@ cerrarModal();
 }
 
 };
+
+cargarPedidos();
