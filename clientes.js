@@ -463,3 +463,27 @@ contenedor.innerHTML =
 html;
 
 }
+
+function obtenerCategoria(cliente){
+
+const pedidos =
+
+Number(
+cliente.cantidad_pedidos || 0
+);
+
+if(pedidos >= 5){
+
+return "🔵 VIP";
+
+}
+
+if(pedidos >= 2){
+
+return "🟡 Frecuente";
+
+}
+
+return "🟢 Nuevo";
+
+}
