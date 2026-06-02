@@ -378,3 +378,88 @@ cerrarModal();
 };
 
 cargarClientes();
+function mostrarRanking(){
+
+const contenedor =
+document.getElementById(
+"rankingClientes"
+);
+
+if(!contenedor)return;
+
+const topClientes =
+
+[...clientesGlobal]
+.sort(
+(a,b)=>
+
+Number(
+b.total_compras || 0
+)
+
+-
+
+Number(
+a.total_compras || 0
+)
+
+)
+.slice(0,5);
+
+let html = "";
+
+topClientes.forEach(
+(cliente,index)=>{
+
+let medalla = "🏅";
+
+if(index===0)
+medalla="🥇";
+
+if(index===1)
+medalla="🥈";
+
+if(index===2)
+medalla="🥉";
+
+html += `
+
+<div class="card">
+
+<h3>
+
+${medalla}
+${cliente.nombre}
+
+</h3>
+
+<p>
+
+📱 ${cliente.telefono}
+
+</p>
+
+<p>
+
+📦 ${cliente.cantidad_pedidos} pedidos
+
+</p>
+
+<p>
+
+💰 $${Number(
+cliente.total_compras || 0
+).toLocaleString("es-CO")}
+
+</p>
+
+</div>
+
+`;
+
+});
+
+contenedor.innerHTML =
+html;
+
+}
