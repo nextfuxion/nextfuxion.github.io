@@ -110,6 +110,7 @@ clientesGlobal
 activarBusqueda();
 mostrarRanking();
 mostrarOportunidades();
+mostrarClientesInactivos();
 }catch(ex){
 
 console.error(ex);
@@ -617,6 +618,125 @@ ${nuevos.length}
 </div>
 
 `;
+
+contenedor.innerHTML =
+html;
+
+}
+
+
+function mostrarClientesInactivos(){
+
+const contenedor =
+document.getElementById(
+"clientesInactivos"
+);
+
+if(!contenedor)return;
+
+const hoy =
+new Date();
+
+let html = "";
+
+const inactivos =
+
+clientesGlobal.filter(
+cliente=>{
+
+if(
+!cliente.ultima_compra
+)return false;
+
+const ultima =
+new Date(
+cliente.ultima_compra
+);
+
+const dias =
+
+(hoy - ultima)
+
+/
+
+(1000*60*60*24);
+
+return dias > 30;
+
+});
+
+if(
+inactivos.length===0
+){
+
+contenedor.innerHTML =
+
+`
+
+<div class="card">
+
+<h3>
+
+🎉 No hay clientes inactivos
+
+</h3>
+
+</div>
+
+`;
+
+return;
+
+}
+
+inactivos.forEach(
+cliente=>{
+
+html += `
+
+<div class="card">
+
+<h3>
+
+${cliente.nombre}
+
+</h3>
+
+<p>
+
+📱 ${cliente.telefono}
+
+</p>
+
+<p>
+
+📦 ${cliente.cantidad_pedidos}
+
+pedidos
+
+</p>
+
+<p>
+
+💰 $${Number(
+cliente.total_compras || 0
+).toLocaleString("es-CO")}
+
+</p>
+
+<a
+target="_blank"
+href="https://wa.me/57${cliente.telefono}?text=Hola%20${encodeURIComponent(cliente.nombre)},%20quería%20contarte%20sobre%20las%20novedades%20de%20FuXion.">
+
+Contactar
+
+</a>
+
+</div>
+
+`;
+
+});
 
 contenedor.innerHTML =
 html;
