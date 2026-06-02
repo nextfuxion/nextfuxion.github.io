@@ -326,6 +326,14 @@ ${cliente.cantidad_pedidos || 0}
 
 <p>
 
+🏷️ Categoría:
+
+${obtenerCategoria(cliente)}
+
+</p>
+
+<p>
+
 💰 Total Comprado:
 
 $${Number(
