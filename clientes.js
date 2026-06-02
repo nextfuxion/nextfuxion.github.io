@@ -38,6 +38,71 @@ document.getElementById(
 ).innerText =
 clientesGlobal.length;
 
+let totalFacturado = 0;
+
+let totalPedidos = 0;
+
+let mejorCliente = "-";
+
+let mejorCompra = 0;
+
+clientesGlobal.forEach(
+cliente=>{
+
+totalFacturado +=
+
+Number(
+cliente.total_compras || 0
+);
+
+totalPedidos +=
+
+Number(
+cliente.cantidad_pedidos || 0
+);
+
+if(
+Number(
+cliente.total_compras || 0
+)
+>
+mejorCompra
+){
+
+mejorCompra =
+
+Number(
+cliente.total_compras || 0
+);
+
+mejorCliente =
+cliente.nombre;
+
+}
+
+}
+);
+
+document.getElementById(
+"clienteTop"
+).innerText =
+mejorCliente;
+
+document.getElementById(
+"totalFacturado"
+).innerText =
+
+"$" +
+
+totalFacturado.toLocaleString(
+"es-CO"
+);
+
+document.getElementById(
+"totalPedidos"
+).innerText =
+totalPedidos;
+  
 mostrarClientes(
 clientesGlobal
 );
