@@ -30,6 +30,11 @@ localStorage.setItem(
 "true"
 );
 
+localStorage.setItem(
+"adminUser",
+usuario
+);
+
 window.location.href =
 "admin.html";
 
