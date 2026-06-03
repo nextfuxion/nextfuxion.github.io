@@ -230,3 +230,8 @@ cargarTareas();
 }
 
 cargarTareas();
+
+generarTareasAutomaticas()
+.then(
+()=>cargarTareas()
+);
