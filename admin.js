@@ -355,3 +355,199 @@ ${ex.message}
 }
 
 cargarAdmin();
+
+async function dashboardEjecutivo(){
+
+const { data: metas } =
+
+await supabaseClient
+.from("metas")
+.select("*");
+
+const { data: tareas } =
+
+await supabaseClient
+.from("tareas")
+.select("*");
+
+const { data: pedidos } =
+
+await supabaseClient
+.from("pedidos")
+.select("*");
+
+const metaActual =
+
+Number(
+metas?.[0]?.meta || 0
+);
+
+let ventas = 0;
+
+(pedidos || []).forEach(
+p=>{
+ventas +=
+Number(
+p.total || 0
+);
+});
+
+document.getElementById(
+"metaMensual"
+).innerText =
+
+"$" +
+
+metaActual.toLocaleString(
+"es-CO"
+);
+
+const cumplimiento =
+
+metaActual
+
+?
+
+(
+ventas /
+metaActual
+)*100
+
+:
+
+0;
+
+document.getElementById(
+"cumplimientoMeta"
+).innerText =
+
+cumplimiento.toFixed(1)
+
++
+
+"%";
+
+document.getElementById(
+"totalAlertas"
+).innerText =
+
+document.querySelectorAll(
+"#alertas .card"
+).length || 0;
+
+const pendientes =
+
+(tareas || [])
+.filter(
+t=>
+t.estado !==
+"Completada"
+)
+.length;
+
+document.getElementById(
+"tareasPendientes"
+).innerText =
+pendientes;
+
+const hoy =
+new Date();
+
+const diasMes =
+
+new Date(
+hoy.getFullYear(),
+hoy.getMonth()+1,
+0
+).getDate();
+
+const promedio =
+
+ventas /
+
+hoy.getDate();
+
+const proyeccion =
+
+promedio *
+diasMes;
+
+document.getElementById(
+"proyeccionMes"
+).innerText =
+
+"$" +
+
+Math.round(
+proyeccion
+).toLocaleString(
+"es-CO"
+);
+
+const ventasPorDia = {};
+
+(pedidos || []).forEach(
+pedido=>{
+
+const fecha =
+new Date(
+pedido.fecha
+);
+
+const dia =
+fecha.getDate();
+
+ventasPorDia[dia] =
+
+(ventasPorDia[dia] || 0)
+
++
+
+Number(
+pedido.total || 0
+);
+
+});
+
+const dias =
+
+Object.keys(
+ventasPorDia
+);
+
+const valores =
+
+Object.values(
+ventasPorDia
+);
+
+new Chart(
+
+document.getElementById(
+"ventasDashboard"
+),
+
+{
+
+type:"line",
+
+data:{
+
+labels:dias,
+
+datasets:[{
+
+label:
+"Ventas",
+
+data:valores
+
+}]
+
+}
+
+}
+
+);
+
+}
