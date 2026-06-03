@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+
+<title>
+
+Agenda Comercial
+
+</title>
+
+<link rel="stylesheet"
+href="styles.css">
+
+</head>
+
+<body>
+
+<div id="adminBar"></div>
+
+<h1>
+
+📅 Agenda Comercial
+
+</h1>
+
+<div class="card">
+
+<input
+type="text"
+id="titulo"
+placeholder="Título de la tarea">
+
+<br><br>
+
+<textarea
+id="descripcion"
+placeholder="Descripción">
+</textarea>
+
+<br><br>
+
+<input
+type="text"
+id="clienteNombre"
+placeholder="Cliente">
+
+<br><br>
+
+<input
+type="text"
+id="clienteTelefono"
+placeholder="Teléfono">
+
+<br><br>
+
+<button
+onclick="crearTarea()">
+
+➕ Crear tarea
+
+</button>
+
+</div>
+
+<h2>
+
+Pendientes
+
+</h2>
+
+<div id="listaTareas">
+
+</div>
+
+<script src="auth.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase.js"></script>
+
+<script src="agenda.js"></script>
+
+<script src="admin-bar.js"></script>
+
+</body>
+
+</html>
