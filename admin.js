@@ -551,3 +551,5 @@ data:valores
 );
 
 }
+
+dashboardEjecutivo();
