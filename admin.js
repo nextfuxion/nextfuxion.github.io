@@ -429,11 +429,7 @@ cumplimiento.toFixed(1)
 
 document.getElementById(
 "totalAlertas"
-).innerText =
-
-document.querySelectorAll(
-"#alertas .card"
-).length || 0;
+).innerText = 0;
 
 const pendientes =
 
@@ -489,13 +485,24 @@ const ventasPorDia = {};
 (pedidos || []).forEach(
 pedido=>{
 
+let dia = 1;
+
+// Si existe created_at usamos esa fecha
+if(pedido.created_at){
+
 const fecha =
 new Date(
-pedido.fecha
+pedido.created_at
 );
 
-const dia =
+if(!isNaN(fecha)){
+
+dia =
 fecha.getDate();
+
+}
+
+}
 
 ventasPorDia[dia] =
 
@@ -509,47 +516,53 @@ pedido.total || 0
 
 });
 
+// ordenar los días
 const dias =
 
 Object.keys(
 ventasPorDia
+)
+.sort(
+(a,b)=>a-b
 );
 
 const valores =
 
-Object.values(
-ventasPorDia
+dias.map(
+dia=>
+ventasPorDia[dia]
 );
 
-new Chart(
-
+// evitar crear la gráfica dos veces
+const canvas =
 document.getElementById(
 "ventasDashboard"
-),
+);
 
+if(canvas){
+
+new Chart(
+canvas,
 {
-
 type:"line",
 
 data:{
-
 labels:dias,
 
 datasets:[{
-
-label:
-"Ventas",
-
+label:"Ventas",
 data:valores
-
 }]
+},
 
+options:{
+responsive:true,
+maintainAspectRatio:false
 }
-
 }
-
 );
 
+}
 }
 
 dashboardEjecutivo();
