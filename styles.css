@@ -439,3 +439,21 @@ border:none;
 border-radius:8px;
 
 }
+
+#dashboardEjecutivo{
+display:flex;
+flex-wrap:wrap;
+gap:20px;
+justify-content:center;
+margin-bottom:30px;
+}
+
+#dashboardEjecutivo .card{
+width:220px;
+min-height:120px;
+}
+
+#ventasDashboard{
+max-width:100%;
+height:300px !important;
+}
