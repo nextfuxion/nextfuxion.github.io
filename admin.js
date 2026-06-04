@@ -23,22 +23,18 @@ ascending:false
 );
 
 if(error){
-
 throw error;
-
 }
 
 let totalVentas = 0;
 
 const clientes = {};
-
 const productos = {};
 
 let ventasHoy = 0;
 
 const hoy =
-new Date()
-.toLocaleDateString();
+new Date().toLocaleDateString();
 
 pedidos.forEach(
 pedido=>{
@@ -50,7 +46,9 @@ pedido.total || 0
 
 if(
 pedido.fecha &&
-pedido.fecha.includes(hoy)
+String(
+pedido.fecha
+).includes(hoy)
 ){
 
 ventasHoy +=
@@ -98,7 +96,7 @@ p.nombre
 +
 
 Number(
-p.cantidad
+p.cantidad || 0
 );
 
 });
@@ -160,7 +158,9 @@ document.getElementById(
 
 "$" +
 
-ticketPromedio.toLocaleString(
+Math.round(
+ticketPromedio
+).toLocaleString(
 "es-CO"
 );
 
@@ -230,34 +230,26 @@ contenedor.innerHTML += `
 <div class="card">
 
 <h3>
-
 ${pedido.numero}
-
 </h3>
 
 <p>
-
-👤 ${pedido.cliente_nombre}
-
+👤 ${pedido.cliente_nombre || "-"}
 </p>
 
 <p>
-
-📅 ${pedido.fecha}
-
+📅 ${pedido.fecha || "-"}
 </p>
 
 <p>
-
-💰 $${Number(pedido.total).toLocaleString("es-CO")}
-
+💰 $${Number(
+pedido.total || 0
+).toLocaleString("es-CO")}
 </p>
 
 <p>
-
 Estado:
-${pedido.estado}
-
+${pedido.estado || "-"}
 </p>
 
 </div>
@@ -270,7 +262,6 @@ window.exportarCSV =
 function(){
 
 let csv =
-
 "Pedido;Fecha;Cliente;Telefono;Total\n";
 
 pedidos.forEach(
@@ -335,15 +326,11 @@ contenedor.innerHTML =
 <div class="card">
 
 <h3>
-
 Error cargando pedidos
-
 </h3>
 
 <p>
-
 ${ex.message}
-
 </p>
 
 </div>
@@ -354,9 +341,9 @@ ${ex.message}
 
 }
 
-cargarAdmin();
-
 async function dashboardEjecutivo(){
+
+try{
 
 const { data: metas } =
 
@@ -411,7 +398,7 @@ metaActual
 (
 ventas /
 metaActual
-)*100
+) * 100
 
 :
 
@@ -461,7 +448,10 @@ const promedio =
 
 ventas /
 
-hoy.getDate();
+Math.max(
+hoy.getDate(),
+1
+);
 
 const proyeccion =
 
@@ -487,15 +477,18 @@ pedido=>{
 
 let dia = 1;
 
-// Si existe created_at usamos esa fecha
-if(pedido.created_at){
+if(
+pedido.created_at
+){
 
 const fecha =
 new Date(
 pedido.created_at
 );
 
-if(!isNaN(fecha)){
+if(
+!isNaN(fecha)
+){
 
 dia =
 fecha.getDate();
@@ -506,7 +499,10 @@ fecha.getDate();
 
 ventasPorDia[dia] =
 
-(ventasPorDia[dia] || 0)
+(
+ventasPorDia[dia]
+|| 0
+)
 
 +
 
@@ -516,7 +512,6 @@ pedido.total || 0
 
 });
 
-// ordenar los días
 const dias =
 
 Object.keys(
@@ -533,13 +528,30 @@ dia=>
 ventasPorDia[dia]
 );
 
-// evitar crear la gráfica dos veces
+console.log(
+"Ventas por día:",
+ventasPorDia
+);
+
+console.log(
+"Días:",
+dias
+);
+
+console.log(
+"Valores:",
+valores
+);
+
 const canvas =
 document.getElementById(
 "ventasDashboard"
 );
 
-if(canvas){
+if(
+canvas &&
+dias.length > 0
+){
 
 new Chart(
 canvas,
@@ -549,10 +561,12 @@ type:"line",
 data:{
 labels:dias,
 
-datasets:[{
+datasets:[
+{
 label:"Ventas",
 data:valores
-}]
+}
+]
 },
 
 options:{
@@ -563,6 +577,17 @@ maintainAspectRatio:false
 );
 
 }
+
+}catch(error){
+
+console.error(
+"Dashboard:",
+error
+);
+
 }
 
+}
+
+cargarAdmin();
 dashboardEjecutivo();
