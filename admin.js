@@ -342,7 +342,90 @@ ${ex.message}
 }
 
 async function dashboardEjecutivo(){
+function generarResumen(
+ventas,
+meta,
+pedidosPendientes,
+tareasPendientes,
+productoTop,
+clienteTop,
+proyeccion
+){
 
+const hora =
+new Date().getHours();
+
+let saludo =
+"Hola";
+
+if(hora < 12){
+saludo =
+"Buenos días";
+}
+else if(hora < 18){
+saludo =
+"Buenas tardes";
+}
+else{
+saludo =
+"Buenas noches";
+}
+
+document.getElementById(
+"saludoEjecutivo"
+).innerText =
+
+`${saludo} 👋`;
+
+document.getElementById(
+"mensajeEjecutivo"
+).innerHTML =
+
+`
+<p>💰 Ventas del mes:
+<strong>
+$${ventas.toLocaleString("es-CO")}
+</strong>
+</p>
+
+<p>🎯 Meta:
+<strong>
+$${meta.toLocaleString("es-CO")}
+</strong>
+</p>
+
+<p>📦 Pedidos pendientes:
+<strong>
+${pedidosPendientes}
+</strong>
+</p>
+
+<p>📅 Tareas pendientes:
+<strong>
+${tareasPendientes}
+</strong>
+</p>
+
+<p>🏆 Producto Top:
+<strong>
+${productoTop}
+</strong>
+</p>
+
+<p>⭐ Mejor Cliente:
+<strong>
+${clienteTop}
+</strong>
+</p>
+
+<p>🚀 Proyección:
+<strong>
+$${Math.round(proyeccion)
+.toLocaleString("es-CO")}
+</strong>
+</p>
+`;
+}
 try{
 
 const { data: metas } =
