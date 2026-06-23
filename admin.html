@@ -108,7 +108,7 @@ Cargando resumen...
 </div>
   
 <div class="card">
-<h3>📦 Total Pedidos</h3>
+<h3>📦 Total </h3>
 <h2 id="totalPedidos">0</h2>
 </div>
 
@@ -151,6 +151,49 @@ class="btn-buy">
 📥 Exportar CSV
 
 </button>
+
+</div>
+<div class="barra-superior">
+
+<input
+id="buscarPedido"
+type="text"
+placeholder="Buscar pedido o cliente..."
+class="search">
+
+<select
+id="filtroEstado"
+class="orden">
+
+<option value="">
+Todos los estados
+</option>
+
+<option value="Pendiente">
+Pendiente
+</option>
+
+<option value="Pagado">
+Pagado
+</option>
+
+<option value="En preparación">
+En preparación
+</option>
+
+<option value="Enviado">
+Enviado
+</option>
+
+<option value="Entregado">
+Entregado
+</option>
+
+<option value="Cancelado">
+Cancelado
+</option>
+
+</select>
 
 </div>
 
